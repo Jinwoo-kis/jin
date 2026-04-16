@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+        <title>MindEase - Loading your calm space...</title>
+    <link rel="icon" type="image/png" href="download.png">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .redirect-message {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+        h1 { margin-bottom: 20px; }
+        p { margin-bottom: 20px; }
+        .btn-primary {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 999px;
+            background: white;
+            color: #333;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 16px;
+        }
+        .hidden {
+            display: none;
+        }
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 4px solid white;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        .breathing-section {
+            margin-top: 30px;
+            max-width: 250px;
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .breathing-text {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+        video {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="redirect-message">
+        <h1>🧘 MindEase</h1>
+        <p id="status-message">Checking your MindEase server...</p>
+        <div class="spinner"></div>
+        <button id="retry-button" class="btn-primary hidden">Retry connection</button>
+        <p><small>If you're not redirected automatically, <a href="http://localhost:8080/" style="color: white;">click here</a>.</small></p>
+        <div class="breathing-section">
+            <div class="breathing-text">Inhale... Exhale...</div>
+            <video autoplay loop muted playsinline>
+                <source src="assetsvideos/breathing.mp4" type="video/mp4">
+                
+            </video>
+        </div>
+        
+        <script>
+            const targetUrl = 'http://localhost:8080/';
+            const statusEl = document.getElementById('status-message');
+            const retryBtn = document.getElementById('retry-button');
+
+            async function checkServer() {
+                statusEl.textContent = 'Checking your MindEase server...';
+                retryBtn.classList.add('hidden');
+
+                try {
+                    await fetch(targetUrl, { method: 'GET', cache: 'no-store' });
+                    window.location.href = targetUrl;
+                } catch (err) {
+                    console.error('Redirect check failed:', err);
+                    statusEl.textContent = 'MindEase server is not available. Please start the backend and try again.';
+                    retryBtn.classList.remove('hidden');
+                }
+            }
+
+            retryBtn.addEventListener('click', checkServer);
+            document.addEventListener('DOMContentLoaded', checkServer);
+        </script>
+
+  
+    </div>
+</body>
+</html>

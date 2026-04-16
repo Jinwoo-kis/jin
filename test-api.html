@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test MindEase API</title>
+</head>
+<body>
+    <h1>Test MindEase API</h1>
+
+    <h2>Register Test User</h2>
+    <button onclick="registerUser()">Register Test User</button>
+    <div id="register-result"></div>
+
+    <h2>Login Test</h2>
+    <button onclick="loginUser()">Login Test User</button>
+    <div id="login-result"></div>
+
+    <script>
+        const API_BASE = 'http://localhost:8080/api';
+
+        async function registerUser() {
+            try {
+                const response = await fetch(`${API_BASE}/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: 'testuser',
+                        email: 'test@example.com',
+                        password: '123456'
+                    })
+                });
+                const result = await response.json();
+                document.getElementById('register-result').textContent = JSON.stringify(result, null, 2);
+            } catch (error) {
+                document.getElementById('register-result').textContent = 'Error: ' + error.message;
+            }
+        }
+
+        async function loginUser() {
+            try {
+                const response = await fetch(`${API_BASE}/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        identifier: 'testuser',
+                        password: '123456'
+                    })
+                });
+                const result = await response.json();
+                document.getElementById('login-result').textContent = JSON.stringify(result, null, 2);
+            } catch (error) {
+                document.getElementById('login-result').textContent = 'Error: ' + error.message;
+            }
+        }
+    </script>
+</body>
+</html>
